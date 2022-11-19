@@ -1,10 +1,43 @@
 import {sock} from './conexao.js'
-
-
-export const getToquen = ()=>{
-    
-        console.log('aqui')
-        console.log(sock.id)
-    
-}
+//Mapeando comandos
+export const ComadosWhats = {
+    groupFetchAllParticipating(){},
+    CriarGrupo(){},
+    getToquen(){return sock.id},
+    ObterConviteGrupo(){},
+    Metadadosdeumgrupo(){},
+    AlterarFotoGrupo(){},
+    AddouRemoverPessoas(){},
+    EntrandoEmGrupos(){},
+    sendMessage(){},
+    AddouRemoverPessoas(){},
+    AddouRemoverPessoas(){},
+    AlterarAsuntoGrupo(){},
+    ApenasAdministradores(){},
+    ColocarGrupoAberto(){},
+    ApenasAdministradorModifiqueOGrupo(){},
+    TodosModifiquemOGrupo(){},
+    AlterarDescricaoGrupo(){},
+    sendMediaAudio(){},
+    RevogarConvite(){},
+    EnviarLink(){},
+    SendBotoes(){},
+    AtivarDesativarTempMessage(){},
+    sendMessageTemp(){},
+    listaBloqueados(){},
+    sendMessage(){},
+    EncaminhandoMensagem(){},
+    sendMessageTemp(){},
+    Bloquear(){},
+    SendBotoesLINK(){},
+    DeletMessage(){},
+    sendMediaAudio(){},
+    DeletFile(){},
+    Upload(){},
+    sendImage(){},
+    sendFile(){},
+    sendPDF(){},
+    sendMedia(){},
+    enviarLista(){}
+} 
 

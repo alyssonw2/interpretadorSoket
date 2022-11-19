@@ -9,7 +9,7 @@ sock.on("connect",async () =>{
 })
 
 sock.on("Qrcode", async dados=>{
-    console.log(dados)
+    console.log('qrcode recebido socket origem'+dados.soket)
 })
 
 sock.on("MensagemNotifi",async(dados)=>{

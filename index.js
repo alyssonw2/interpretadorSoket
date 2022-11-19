@@ -1,7 +1,7 @@
 import * as dotenv from 'dotenv' 
 import express from 'express'
 import {sock} from './soket/conexao.js'
-import {getToquen} from './soket/comandos.js'
+import {ComadosWhats} from './soket/comandos.js'
 import { connection } from './mysql/index.js'
 export const app = express()
 dotenv.config()
@@ -10,7 +10,7 @@ dotenv.config()
 const port = process.env.PORTA
 
 app.get('/', (req, res) => {
-    res.send('O interpretador está online')
+    res.send('O interpretador está online:'+ ComadosWhats.getToquen())
 })
 app.get('/conexoes', (req, res) => {
     let query = "SELECT * FROM `sessoes`"
@@ -22,6 +22,11 @@ app.get('/conexoes', (req, res) => {
       });
     connection.end();
 })
+
+app.post('/groupFetchAllParticipating',(req,res)=>{
+
+})
+
 app.listen(port, () => {
     console.log(process.env.MESSAGE)  
 })
