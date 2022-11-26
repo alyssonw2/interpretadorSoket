@@ -80,6 +80,11 @@ app.post('/sendMessage',  async (req, res) => {
     "audioName":dados.audioName,
     "audio64":dados.audio64,
     "ptt":dados.ptt,
+    "videonome":dados.videonome,
+    "videobase64":dados.videobase64,
+    "filebase64":dados.filebase64,
+    "filenome":dados.filenome,
+    
     }
     sock.emit("sendMessage",d,async (ret)=>{
         console.log(ret)
@@ -228,7 +233,6 @@ let d = {
     })
 
 })
-
 app.post('/AlterarFotoGrupo',  async (req, res) => {
     let dados = req.body
     let d = {
@@ -245,7 +249,6 @@ app.post('/AlterarFotoGrupo',  async (req, res) => {
      })
     
  })
-
  app.post('/AddouRemoverPessoas',  async (req, res) => {
     let dados = req.body
     let d = {
@@ -349,15 +352,30 @@ app.post('/AlterarFotoGrupo',  async (req, res) => {
      })
     
  })
- 
- 
 
+ app.post('/Upload',  async (req, res) => {
+    let dados = req.body
+    let d = {
+     "filename":dados.filename,
+     "filebase64":sock.id,
+     }
+     sock.emit("Upload",d,async (ret)=>{
+         console.log(ret)
+         res.send(ret)
+     })
+     res.send('sucesso')
+ })
+ app.post('/DeletFile',  async (req, res) => {
+    let dados = req.body
+    let d = {
+     "filename":dados.filename
+     }
+     sock.emit("DeletFile",d,async (ret)=>{
+         console.log(ret)
+         res.send(ret)
+     })
+ })
 
- 
-
- 
- 
- 
 
 app.listen(port, () => {
     console.log(process.env.MESSAGE)  
