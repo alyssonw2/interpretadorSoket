@@ -1,10 +1,10 @@
 import mysql from 'mysql'
-import {readFile, readFileSync} from 'fs'
-export const connection = mysql.createConnection({
+export const connection =  mysql.createPool({
+    "connectionLimit" : 10,
     "host"     : "localhost",
     "user"     : "apisoketwhatsapp",
     "password" : "Nei#8suptec",
     "database" : "apisoketwhatsapp"
 });
-    
-  
+
+

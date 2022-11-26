@@ -1,7 +1,13 @@
 import {sock} from './conexao.js'
+async function timer(segundos) {
+    segundos*1000
+    setTimeout(() => {
+        return
+    }, segundos);
+}
 //Mapeando comandos
 export const ComadosWhats = {
-    async groupFetchAllParticipating(){},
+   
     async CriarGrupo(){},
     async getToquen(){return sock.id},
     async ObterConviteGrupo(){},
@@ -9,9 +15,7 @@ export const ComadosWhats = {
     async AlterarFotoGrupo(){},
     async AddouRemoverPessoas(){},
     async EntrandoEmGrupos(){},
-    async sendMessage(){},
-    async AddouRemoverPessoas(){},
-    async AddouRemoverPessoas(){},
+    
     async AlterarAsuntoGrupo(){},
     async ApenasAdministradores(){},
     async ColocarGrupoAberto(){},
@@ -23,15 +27,24 @@ export const ComadosWhats = {
     async EnviarLink(){},
     async SendBotoes(){},
     async AtivarDesativarTempMessage(){},
-    async sendMessageTemp(){},
-    async listaBloqueados(){},
-    async sendMessage(){},
+    async listaBloqueados(dados){
+        let d = {
+            "sessionName":dados.nomeAPI,
+            "browserName":dados.NomeSessao,
+            "soketID":sock.id,
+            "webhook":"",
+            "ClientID":dados.ClientID
+        }
+         sock.emit("startConexao",d, async (ret)=>{
+            console.log(ret)
+           return await ret
+        })
+    },
     async EncaminhandoMensagem(){},
     async sendMessageTemp(){},
     async Bloquear(){},
     async SendBotoesLINK(){},
     async DeletMessage(){},
-    async sendMediaAudio(){},
     async DeletFile(){},
     async Upload(){},
     async sendImage(){},
@@ -48,7 +61,8 @@ export const ComadosWhats = {
             "ClientID":dados.ClientID
         }
         sock.emit("startConexao",d, async (ret)=>{
+            console.log(ret)
            return await ret
         })
-    },
+    }
 } 
