@@ -32,6 +32,21 @@ app.post('/start',  async (req, res) => {
     )
     
 })
+app.post('/logout',  async (req, res) => {
+    console.log(req.body)
+    await ComadosWhats.logout(req.body)
+    .then(
+        async(ret)=>{
+            res.send(ret)
+        }
+    )
+    .catch(
+        (err)=>{res.send(err)}
+        
+    )
+    
+})
+
 app.post('/fetchBlocklist',  async (req, res) => {
     let dados = req.body
     let d = {
@@ -105,8 +120,6 @@ app.post('/groupFetchAllParticipating',  async (req, res) => {
         res.send(ret)
     })
 
-    
-    
 })
 app.post('/groupToggleEphemeral',  async (req, res) => {
     let dados = req.body
@@ -156,7 +169,6 @@ app.post('/getqrcode',  async (req, res) => {
         "ClientID":dados.ClientID
     }
    
-
     let q = "SELECT * FROM `sessoes` WHERE sessionName = '"+d.sessionName+"'"
     console.log(q)
     connection.query(q, function (error, results) {
@@ -165,9 +177,6 @@ app.post('/getqrcode',  async (req, res) => {
     })
     
     return
-    
-
-    
     
 })
 app.get('/GetAllPorts',  async (req, res) => {
@@ -376,10 +385,7 @@ app.post('/AlterarFotoGrupo',  async (req, res) => {
      })
  })
 
-
 app.listen(port, () => {
     console.log(process.env.MESSAGE)  
     console.log(sock.id)
 })
-
-

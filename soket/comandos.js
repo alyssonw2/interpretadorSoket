@@ -64,5 +64,18 @@ export const ComadosWhats = {
             console.log(ret)
            return await ret
         })
+    },
+    async logout(dados){
+        let d = {
+            "sessionName":dados.nomeAPI,
+            "browserName":dados.NomeSessao,
+            "soketID":sock.id,
+            "webhook":"",
+            "ClientID":dados.ClientID
+        }
+        sock.emit("logout",d, async (ret)=>{
+            console.log(ret)
+           return await ret
+        })
     }
 } 
