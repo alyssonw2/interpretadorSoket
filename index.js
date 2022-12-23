@@ -32,19 +32,31 @@ app.post('/start',  async (req, res) => {
     )
     
 })
+
 app.post('/logout',  async (req, res) => {
     console.log(req.body)
-    await ComadosWhats.logout(req.body)
-    .then(
-        async(ret)=>{
-            res.send(ret)
+ let d = {
+            "sessionName":req.body.nomeAPI,
+            "browserName":req.body.NomeSessao,
+            "soketID":"",
+            "webhook":"",
+            "ClientID":req.body.ClientID
         }
-    )
-    .catch(
-        (err)=>{res.send(err)}
-        
-    )
-    
+    sock.emit('logout',d,async(ret)=>{
+        res.send({"Return":"Logout :"+req.body.nomeAPI})
+            await ComadosWhats.logout(d)
+            .then(
+                async(ret)=>{
+                    res.send(ret)
+                }
+            )
+            .catch(
+                (err)=>{res.send(err)}
+
+            )
+            res.send({"Return":"Logout :"+req.body.nomeAPI})
+    })
+   
 })
 
 app.post('/fetchBlocklist',  async (req, res) => {
