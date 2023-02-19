@@ -21,8 +21,14 @@ app.get('/', (req, res) => {
 })
 app.post('/start', async (req, res) => {
     console.log(req.body);
+    let dados = {
+        "sessionName": req.body.Wsnumber,
+        "NomeSessao":req.body.NomeSessao,
+        "ClientID":req.body.ClientID
+    }
+    
     try {
-      const ret = await ComadosWhats.start(req.body);
+      const ret = await ComadosWhats.start(dados);
       res.send(ret);
     } catch (error) {
       console.log(error);
@@ -32,9 +38,11 @@ app.post('/start', async (req, res) => {
   
 
   app.post('/getAllContacts', async (req, res) => {
-    let dados = req.body
+   
     let d = {
-        "sessionName":dados.sessionName,
+        "sessionName": req.body.nomeAPI,
+        "NomeSessao":req.body.NomeSessao,
+        "ClientID":req.body.ClientID
     }
     console.log(d)
     try {

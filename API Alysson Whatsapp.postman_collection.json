@@ -79,7 +79,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n\t\"sessionName\":\"5511980736253\"    \n}",
+							"raw": "{\n\t\"nomeAPI\":\"5511980736253\"  ,\n\t\"NomeSessao\":\"Teste\",\n    \"ClientID\":\"alysson\"  \n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -109,7 +109,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n\t\"nomeAPI\":\"5511980732653\",\n\t\"NomeSessao\":\"Meu Grupo Vip\",\n    \"ClientID\":\"bot2\"\n}",
+							"raw": "{\n\t\"nomeAPI\":\"5511980732653\",\n\t\"NomeSessao\":\"Meu Grupo Vip\",\n    \"ClientID\":\"alysson\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -139,7 +139,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n\t\"nomeAPI\":\"5511980732653\",\n\t\"NomeSessao\":\"Meu Grupo Vip\",\n    \"ClientID\":\"bot2\"\n}",
+							"raw": "{\n\t\"nomeAPI\":\"5511980732653\",\n\t\"NomeSessao\":\"Meu Grupo Vip\",\n    \"ClientID\":\"alysson\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -694,7 +694,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"sessionName\":\"5511980732653\"\n}",
+							"raw": "{\n    \"nomeAPI\":\"5511980736253\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -724,7 +724,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"nomeAPI\":\"5511980732653\",\n\t\"NomeSessao\":\"Meu Grupo Vip\",\n    \"ClientID\":\"bot2\",\n    \"recebedor\": \"553171877806@c.us\",\n\t\"mensagem\": { \n        \"text\": \"desaparece1\" \n        },\n    \"ephemeralExpiration\":{\"ephemeralExpiration\":86400}\n}",
+							"raw": "{\n    \"nomeAPI\":\"5511980736253\",\n\t\"NomeSessao\":\"5511980736253\",\n    \"ClientID\":\"bot2\",\n    \"recebedor\": \"553171877806@c.us\",\n\t\"mensagem\": { \n        \"text\": \"desaparece1\" \n        },\n    \"ephemeralExpiration\":{\"ephemeralExpiration\":86400}\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -754,7 +754,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \n    \"nomeAPI\":\"5511980732653\",\n\t\"NomeSessao\":\"Meu Grupo Vip\",\n    \"ClientID\":\"bot2\",\n    \"recebedor\": \"120363027808281074@g.us\",\n\t\"mensagem\": { \n        \"text\": \"mensagem normal\" \n        }\n         \n\n}",
+							"raw": "{\n    \n    \"nomeAPI\":\"5511980736253\",\n\t\"NomeSessao\":\"5511980736253\",\n    \"ClientID\":\"bot2\",\n    \"recebedor\": \"120363027808281074@g.us\",\n\t\"mensagem\": { \n        \"text\": \"mensagem normal\" \n        }\n         \n\n}",
 							"options": {
 								"raw": {
 									"language": "json"
