@@ -19,19 +19,35 @@ const port = process.env.PORTA
 app.get('/', (req, res) => {
     res.send('O interpretador está online:'+ ComadosWhats.getToquen())
 })
-app.post('/start',  async (req, res) => {
-    console.log(req.body)
-    await ComadosWhats.start(req.body)
-    .then(
-        async(ret)=>{
-            res.send(ret)
-        }
-    )
-    .catch(
-        console.log('')
-    )
-    
-})
+app.post('/start', async (req, res) => {
+    console.log(req.body);
+    try {
+      const ret = await ComadosWhats.start(req.body);
+      res.send(ret);
+    } catch (error) {
+      console.log(error);
+      res.sendStatus(500); // ou outra resposta de erro desejada
+    }
+  });
+  
+
+  app.post('/getAllContacts', async (req, res) => {
+    let dados = req.body
+    let d = {
+        "sessionName":dados.sessionName,
+    }
+    console.log(d)
+    try {
+      const ret = sock.emit("getContacts",d, async (ret)=>{
+        res.send(ret)})
+      
+    } catch (error) {
+      console.log(error);
+      res.sendStatus(500); // ou outra resposta de erro desejada
+    }
+  });
+  
+  
 
 app.post('/logout',  async (req, res) => {
     console.log(req.body)
