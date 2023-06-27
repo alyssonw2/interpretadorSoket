@@ -7,7 +7,6 @@ async function timer(segundos) {
 }
 //Mapeando comandos
 export const ComadosWhats = {
-   
     async CriarGrupo(){},
     async getToquen(){return sock.id},
     async ObterConviteGrupo(){},
@@ -15,7 +14,6 @@ export const ComadosWhats = {
     async AlterarFotoGrupo(){},
     async AddouRemoverPessoas(){},
     async EntrandoEmGrupos(){},
-    
     async AlterarAsuntoGrupo(){},
     async ApenasAdministradores(){},
     async ColocarGrupoAberto(){},
@@ -28,14 +26,8 @@ export const ComadosWhats = {
     async SendBotoes(){},
     async AtivarDesativarTempMessage(){},
     async listaBloqueados(dados){
-        let d = {
-            "sessionName":dados.nomeAPI,
-            "browserName":dados.NomeSessao,
-            "soketID":sock.id,
-            "webhook":"",
-            "ClientID":dados.ClientID
-        }
-         sock.emit("startConexao",d, async (ret)=>{
+        
+         sock.emit("startConexao",dados, async (ret)=>{
             console.log(ret)
            return await ret
         })
@@ -53,29 +45,23 @@ export const ComadosWhats = {
     async sendMedia(){},
     async enviarLista(){},
     async start(dados){
-        let d = {
-            "sessionName":dados.nomeAPI,
-            "browserName":dados.NomeSessao,
-            "soketID":sock.id,
-            "webhook":"",
-            "ClientID":dados.ClientID
-        }
-        sock.emit("startConexao",d, async (ret)=>{
+        
+        sock.emit("startConexao",dados, async (ret)=>{
             console.log(ret)
            return await ret
         })
-    },
-    async logout(dados){
-        let d = {
-            "sessionName":dados.nomeAPI,
-            "browserName":dados.NomeSessao,
-            "soketID":sock.id,
-            "webhook":"",
-            "ClientID":dados.ClientID
+        },
+        async logout(dados){
+            let d = {
+                "sessionName":dados.sessionName,
+                "browserName":dados.browserName,
+                "soketID":sock.id,
+                "webhook":"",
+                "ClientID":dados.ClientID
+            }
+            sock.emit("logout",d, async (ret)=>{
+                console.log(ret)
+            return await ret
+            })
         }
-        sock.emit("logout",d, async (ret)=>{
-            console.log(ret)
-           return await ret
-        })
-    }
 } 

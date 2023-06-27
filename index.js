@@ -3,6 +3,9 @@ import express from 'express'
 import {sock} from './soket/conexao.js'
 import {ComadosWhats} from './soket/comandos.js'
 import { connection } from './mysql/index.js'
+import { exec } from 'child_process';
+
+
 export const app = express()
 app.use(express.json({limit: '50mb'}));
 async function timer(segundos) {
@@ -16,20 +19,25 @@ dotenv.config()
 //console.log(process.env.WS)
 const port = process.env.PORTA
 
+
 app.get('/', (req, res) => {
     res.send('O interpretador está online:'+ ComadosWhats.getToquen())
 })
 app.post('/start', async (req, res) => {
     console.log(req.body);
     let dados = {
-        "sessionName": req.body.Wsnumber,
-        "NomeSessao":req.body.NomeSessao,
+        "sessionName": req.body.sessionName,
+        "NomeSessao":req.body.sessionName,
+        "browserName":req.body.browserName,
+        "soketID":req.body.soketID,
+        "webhook":req.body.webhook,
         "ClientID":req.body.ClientID
+
     }
     
     try {
       const ret = await ComadosWhats.start(dados);
-      res.send(ret);
+      res.sendStatus(200);
     } catch (error) {
       console.log(error);
       res.sendStatus(500); // ou outra resposta de erro desejada
@@ -40,8 +48,8 @@ app.post('/start', async (req, res) => {
   app.post('/getAllContacts', async (req, res) => {
    
     let d = {
-        "sessionName": req.body.nomeAPI,
-        "NomeSessao":req.body.NomeSessao,
+        "sessionName": req.body.sessionName,
+        "NomeSessao":req.body.sessionName,
         "ClientID":req.body.ClientID
     }
     console.log(d)
@@ -55,19 +63,38 @@ app.post('/start', async (req, res) => {
     }
   });
   
-  
+
+app.post('/restartpm2claster', async (req, res) => {
+  const { claster } = req.body;
+
+  if (claster === '547898') {
+    res.status(200).send('Claster reiniciado ');
+    exec('pm2 restart all', (error, stdout, stderr) => {
+      if (error) {
+        console.error(`Erro ao executar o comando: ${error}`);
+        return res.status(500).send('Erro interno do servidor');
+      }
+      console.log(`Saída do comando: ${stdout}`);
+      console.error(`Erros do comando: ${stderr}`);
+      return res.status(200).send('Cluster reiniciado com sucesso!');
+    });
+  } else {
+    return res.status(400).send('Claster inválido');
+  }
+});
+
 
 app.post('/logout',  async (req, res) => {
     console.log(req.body)
  let d = {
-            "sessionName":req.body.nomeAPI,
+            "sessionName":req.body.sessionName,
             "browserName":req.body.NomeSessao,
             "soketID":"",
             "webhook":"",
             "ClientID":req.body.ClientID
         }
     sock.emit('logout',d,async(ret)=>{
-        res.send({"Return":"Logout :"+req.body.nomeAPI})
+        res.send({"Return":"Logout :"+req.body.sessionName})
             await ComadosWhats.logout(d)
             .then(
                 async(ret)=>{
@@ -78,7 +105,7 @@ app.post('/logout',  async (req, res) => {
                 (err)=>{res.send(err)}
 
             )
-            res.send({"Return":"Logout :"+req.body.nomeAPI})
+            res.send({"Return":"Logout :"+req.body.sessionName})
     })
    
 })
@@ -86,21 +113,24 @@ app.post('/logout',  async (req, res) => {
 app.post('/fetchBlocklist',  async (req, res) => {
     let dados = req.body
     let d = {
-        "sessionName":dados.nomeAPI,
-        "browserName":dados.NomeSessao,
-        "soketID":sock.id,
-        "webhook":"",
-        "ClientID":dados.ClientID
-    }
+        "sessionName": req.body.sessionName,
+        "browserName": req.body?.browserName || 'API teste',
+        "soketID": req.body?.soketID || '',
+        "webhook": req.body?.webhook || '',
+        "ClientID": req.body?.ClientID
+      }
     sock.emit("fetchBlocklist",d, async (ret)=>{
         res.send(ret)
     })
     
 })
+
+
+
 app.post('/getstatus',  async (req, res) => {
     let dados = req.body
     let d = {
-        "sessionName":dados.nomeAPI,
+        "sessionName":dados.sessionName,
         "browserName":dados.NomeSessao,
         "soketID":sock.id,
         "webhook":"",
@@ -114,7 +144,7 @@ app.post('/getstatus',  async (req, res) => {
 app.post('/sendMessage',  async (req, res) => {
    let dados = req.body
    let d = {
-    "sessionName":dados.nomeAPI,
+    "sessionName":dados.sessionName,
     "browserName":dados.NomeSessao,
     "soketID":sock.id,
     "webhook":"",
@@ -146,7 +176,7 @@ app.post('/sendMessage',  async (req, res) => {
 app.post('/groupFetchAllParticipating',  async (req, res) => {
     let dados = req.body
     let d = {
-        "sessionName":dados.nomeAPI,
+        "sessionName":dados.sessionName,
         "browserName":dados.NomeSessao,
         "soketID":sock.id,
         "webhook":"",
@@ -160,7 +190,7 @@ app.post('/groupFetchAllParticipating',  async (req, res) => {
 app.post('/groupToggleEphemeral',  async (req, res) => {
     let dados = req.body
     let d = {
-     "sessionName":dados.nomeAPI,
+     "sessionName":dados.sessionName,
      "browserName":dados.NomeSessao,
      "soketID":sock.id,
      "webhook":"",
@@ -182,7 +212,7 @@ app.post('/groupToggleEphemeral',  async (req, res) => {
 app.post('/groupMetadata',  async (req, res) => {
 let dados = req.body
 let d = {
-    "sessionName":dados.nomeAPI,
+    "sessionName":dados.sessionName,
     "browserName":dados.NomeSessao,
     "soketID":sock.id,
     "webhook":"",
@@ -198,7 +228,7 @@ let d = {
 app.post('/getqrcode',  async (req, res) => {
     let dados = req.body
     let d = {
-        "sessionName":dados.nomeAPI,
+        "sessionName":dados.sessionName,
         "browserName":dados.NomeSessao,
         "soketID":sock.id,
         "webhook":"",
@@ -238,8 +268,8 @@ app.get('/conexoes', (req, res) => {
 })
 app.post('/GetLogsGroups',  async (req, res) => {
     let dados =  req.body
-    let {nomeAPI} = dados
-    let q = "SELECT * FROM `logsgrupos` WHERE logs_sessionName = '"+nomeAPI+"'"
+    let {sessionName} = dados
+    let q = "SELECT * FROM `logsgrupos` WHERE logs_sessionName = '"+sessionName+"'"
     console.log(q)
     connection.query(q, function (error, results) {
         if (error){console.log(error); res.send(error); return;};
@@ -250,7 +280,7 @@ app.post('/GetLogsGroups',  async (req, res) => {
 app.post('/CriarGrupo',  async (req, res) => {
     let dados = req.body
     let d = {
-     "sessionName":dados.nomeAPI,
+     "sessionName":dados.sessionName,
      "browserName":dados.NomeSessao,
      "soketID":sock.id,
      "webhook":"",
@@ -266,7 +296,7 @@ app.post('/CriarGrupo',  async (req, res) => {
 app.post('/ObterConviteGrupo',  async (req, res) => {
 let dados = req.body
 let d = {
-    "sessionName":dados.nomeAPI,
+    "sessionName":dados.sessionName,
     "browserName":dados.NomeSessao,
     "soketID":sock.id,
     "webhook":"",
@@ -281,7 +311,7 @@ let d = {
 app.post('/AlterarFotoGrupo',  async (req, res) => {
     let dados = req.body
     let d = {
-     "sessionName":dados.nomeAPI,
+     "sessionName":dados.sessionName,
      "browserName":dados.NomeSessao,
      "soketID":sock.id,
      "webhook":"",
@@ -297,7 +327,7 @@ app.post('/AlterarFotoGrupo',  async (req, res) => {
  app.post('/AddouRemoverPessoas',  async (req, res) => {
     let dados = req.body
     let d = {
-     "sessionName":dados.nomeAPI,
+     "sessionName":dados.sessionName,
      "soketID":sock.id,
      "webhook":"",
      "GroupID":dados.GroupID,
@@ -313,7 +343,7 @@ app.post('/AlterarFotoGrupo',  async (req, res) => {
  app.post('/AlterarAsuntoGrupo',  async (req, res) => {
     let dados = req.body
     let d = {
-     "sessionName":dados.nomeAPI,
+     "sessionName":dados.sessionName,
      "soketID":sock.id,
      "webhook":"",
      "GroupID":dados.GroupID,
@@ -328,7 +358,7 @@ app.post('/AlterarFotoGrupo',  async (req, res) => {
  app.post('/AlterarDescricaoGrupo',  async (req, res) => {
     let dados = req.body
     let d = {
-     "sessionName":dados.nomeAPI,
+     "sessionName":dados.sessionName,
      "soketID":sock.id,
      "webhook":"",
      "GroupID":dados.GroupID,
@@ -343,7 +373,7 @@ app.post('/AlterarFotoGrupo',  async (req, res) => {
  app.post('/groupSettingUpdate',  async (req, res) => {
     let dados = req.body
     let d = {
-     "sessionName":dados.nomeAPI,
+     "sessionName":dados.sessionName,
      "soketID":sock.id,
      "webhook":"",
      "GroupID":dados.GroupID,
@@ -358,7 +388,7 @@ app.post('/AlterarFotoGrupo',  async (req, res) => {
  app.post('/ObterPerfilComercial',  async (req, res) => {
     let dados = req.body
     let d = {
-     "sessionName":dados.nomeAPI,
+     "sessionName":dados.sessionName,
      "soketID":sock.id,
      "webhook":"",
      "WhatsappID":dados.WhatsappID,
@@ -372,7 +402,7 @@ app.post('/AlterarFotoGrupo',  async (req, res) => {
  app.post('/profilePictureUrl',  async (req, res) => {
     let dados = req.body
     let d = {
-     "sessionName":dados.nomeAPI,
+     "sessionName":dados.sessionName,
      "soketID":sock.id,
      "webhook":"",
      "WhatsappID":dados.WhatsappID,
@@ -386,7 +416,7 @@ app.post('/AlterarFotoGrupo',  async (req, res) => {
  app.post('/checkWhatsapp',  async (req, res) => {
     let dados = req.body
     let d = {
-     "sessionName":dados.nomeAPI,
+     "sessionName":dados.sessionName,
      "soketID":sock.id,
      "webhook":"",
      "WhatsappID":dados.WhatsappID,
@@ -425,3 +455,16 @@ app.listen(port, () => {
     console.log(process.env.MESSAGE)  
     console.log(sock.id)
 })
+
+
+setTimeout(() => {
+    exec('pm2 restart all', (error, stdout, stderr) => {
+        if (error) {
+         // console.error(`Erro ao executar o comando: ${error}`);
+          return res.status(500).send('Erro interno do servidor');
+        }
+        console.log(`Saída do comando: ${stdout}`);
+        console.error(`Erros do comando: ${stderr}`);
+        return res.status(200).send('Cluster reiniciado com sucesso!');
+    })
+}, 720_000);

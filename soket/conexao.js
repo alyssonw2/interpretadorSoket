@@ -1,8 +1,9 @@
 import io from 'socket.io-client'
 import { connection } from '../mysql/index.js'
-export const sock = io("http://192.168.2.103:7777", {
+export const sock = io("http://:7777", {
 reconnectionDelayMax: 10000
 });
+
 
 sock.on("connect",async () =>{
     console.log('id socket conectado:'+sock.id)
