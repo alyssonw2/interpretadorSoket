@@ -36,10 +36,10 @@ app.post('/start', async (req, res) => {
 
     try {
         const ret = await ComadosWhats.start(dados);
-        res.sendStatus(200);
+        res.sendStatus(200).json(ret);
     } catch (error) {
         console.log(error);
-        res.sendStatus(500); // ou outra resposta de erro desejada
+        res.sendStatus(200).json(error); // ou outra resposta de erro desejada
     }
 });
 app.post('/getAllContacts', async (req, res) => {
@@ -155,7 +155,7 @@ app.post('/getCollections', async (req, res) => {
 })
 
 
-
+/*
 app.post('/sendMessage', async (req, res) => {
     let dados = req.body
     let d = {
@@ -188,6 +188,71 @@ app.post('/sendMessage', async (req, res) => {
     })
 
 })
+*/
+
+app.post('/sendMessage', async (req, res) => {
+    try {
+      let dados = req.body;
+      let d = {
+        "sessionName": dados.sessionName,
+        "browserName": dados.NomeSessao,
+        "soketID": sock.id,
+        "webhook": "",
+        "ClientID": dados.ClientID,
+        "base64": dados.base64,
+        "imgName": dados.imgName,
+        "message": dados.mensagem,
+        "forward": dados.forward,
+        "id": dados.recebedor,
+        "ephemeralExpiration": dados.ephemeralExpiration,
+        "delet": dados.delet,
+        "quoted": dados.quoted,
+        "audio": dados.audio,
+        "audioName": dados.audioName,
+        "audio64": dados.audio64,
+        "ptt": dados.ptt,
+        "videonome": dados.videonome,
+        "videobase64": dados.videobase64,
+        "filebase64": dados.filebase64,
+        "filenome": dados.filenome,
+
+    }
+      const maxRetries = 3;
+      let retryCount = 0;
+  
+      async function sendMessageWithRetry() {
+        try {
+          const ret = await new Promise((resolve, reject) => {
+            sock.emit("sendMessage", d, (response) => {
+              resolve(response);
+            });
+          });
+  
+          console.log(ret);
+          return res.send(ret); // Retorna a resposta do envio com sucesso
+        } catch (error) {
+          console.error('Erro ao enviar mensagem:', error);
+          retryCount++;
+  
+          if (retryCount < maxRetries) {
+            // Tentar novamente após 200 ms de atraso
+            setTimeout(sendMessageWithRetry, 200);
+          } else {
+            res.status(500).send({ error: 'Não foi possível enviar a mensagem após três tentativas. Tente novamente mais tarde.' });
+          }
+        }
+      }
+  
+      // Inicia o processo de envio com tentativas
+      sendMessageWithRetry();
+    } catch (error) {
+      console.error('Erro no servidor:', error);
+      res.status(500).send({ error: 'Ocorreu um erro interno no servidor.' });
+    }
+  });
+  
+
+
 app.post('/groupFetchAllParticipating', async (req, res) => {
     let dados = req.body
     let d = {
