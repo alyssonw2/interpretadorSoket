@@ -554,6 +554,36 @@ app.post('/DeletFile', async (req, res) => {
         res.send(ret)
     })
 })
+
+app.post('/groupGetInviteInfo', async (req, res) => {
+    let dados = req.body
+    let d = {
+        "sessionName": dados.sessionName,
+        "soketID": sock.id,
+        "webhook": "",
+        "tokenGroup": dados.tokenGroup,
+    }
+    sock.emit("groupGetInviteInfo", d, async (ret) => {
+        console.log(ret)
+        res.send(ret)
+    })
+
+})
+
+app.post('/EntrarEmGrupo', async (req, res) => {
+    let dados = req.body
+    let d = {
+        "sessionName": dados.sessionName,
+        "soketID": sock.id,
+        "webhook": "",
+        "tokenGroup": dados.tokenGroup,
+    }
+    sock.emit("EntrarEmGrupo", d, async (ret) => {
+        console.log(ret)
+        res.send(ret)
+    })
+
+})
 app.listen(port, () => {
     console.log(process.env.MESSAGE)
     console.log(sock.id)
